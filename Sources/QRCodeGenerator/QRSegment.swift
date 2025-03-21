@@ -158,6 +158,11 @@ public struct QRSegment: Hashable {
         return QRSegment(mode: .eci, numChars: 0, data: bb.bits)
     }
     
+    /// Returns a segment representing a FNC1 in first position
+    public static func makeFNC1FirstPosition() -> Self {
+        return QRSegment(mode: .fnc1FirstPosition, numChars: 0, data: [])
+    }
+    
     /*---- Constructor (low level) ----*/
     
     /// Creates a new QR Code segment with the given attributes and data.
@@ -207,6 +212,7 @@ public struct QRSegment: Hashable {
         case byte
         case kanji
         case eci
+        case fnc1FirstPosition
         
         /// Returns an unsigned 4-bit integer value (range 0 to 15)
         /// representing the mode indicator bits for this mode object.
@@ -217,6 +223,7 @@ public struct QRSegment: Hashable {
                 case .byte: return 0x4
                 case .kanji: return 0x8
                 case .eci: return 0x7
+                case .fnc1FirstPosition: return 0x5
             }
         }
         
@@ -230,6 +237,7 @@ public struct QRSegment: Hashable {
                 case .byte: v = [8, 16, 16]
                 case .kanji: v = [8, 10, 12]
                 case .eci: v = [0, 0, 0]
+                case .fnc1FirstPosition: v = [0, 0, 0]
             }
             return v[(Int(version.value) + 7) / 17]
         }
